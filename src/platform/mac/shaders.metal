@@ -1,3 +1,4 @@
+// Modified from zed-industries/zed@69e21302 (crates/gpui): BGRA surfaces.
 #include <metal_stdlib>
 #include <simd/simd.h>
 

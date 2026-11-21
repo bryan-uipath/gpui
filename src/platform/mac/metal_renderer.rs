@@ -1,3 +1,4 @@
+// Modified from zed-industries/zed@69e21302 (crates/gpui): BGRA surfaces.
 use super::metal_atlas::MetalAtlas;
 use crate::{
     AtlasTextureId, Background, Bounds, ContentMask, DevicePixels, MonochromeSprite, PaintSurface,
