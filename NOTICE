@@ -2,3 +2,6 @@ This repository is a fork of gpui 0.2.2, the crate as published on crates.io, bu
 zed-industries/zed at commit 69e2130295c2649963eb639fc70b4f2ee8ea1624 (path crates/gpui),
 with one patch on top: surfaces may be 32-bit BGRA pixel buffers as well as biplanar YCbCr ones.
 gpui is licensed under the Apache License 2.0 (LICENSE-APACHE); so is the patch.
+
+Parts are taken from gpui-fast (https://github.com/longbridge/gpui-fast), a fork of gpui by
+Longbridge, Copyright 2026 Longbridge, Apache License 2.0; each such file says so at its top.

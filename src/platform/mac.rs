@@ -1,3 +1,4 @@
+// Modified from zed-industries/zed@69e21302 (crates/gpui): declares sized_fonts.
 //! Macos screen have a y axis that goings up from the bottom of the screen and
 //! an origin at the bottom left of the main display.
 mod dispatcher;
@@ -26,6 +27,8 @@ mod attributed_string;
 #[cfg(feature = "font-kit")]
 mod open_type;
 
+#[cfg(feature = "font-kit")]
+mod sized_fonts;
 #[cfg(feature = "font-kit")]
 mod text_system;
 

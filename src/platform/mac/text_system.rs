@@ -1,3 +1,4 @@
+// Modified from zed-industries/zed@69e21302 (crates/gpui): a CoreText font kept per size, from gpui-fast 0.1.15 (Longbridge).
 use crate::{
     Bounds, DevicePixels, Font, FontFallbacks, FontFeatures, FontId, FontMetrics, FontRun,
     FontStyle, FontWeight, GlyphId, LineLayout, Pixels, PlatformTextSystem, Point,
@@ -46,6 +47,7 @@ use smallvec::SmallVec;
 use std::{borrow::Cow, char, convert::TryFrom, sync::Arc};
 
 use super::open_type::apply_features_and_fallbacks;
+use super::sized_fonts::SizedFonts;
 
 #[allow(non_upper_case_globals)]
 const kCGImageAlphaOnly: u32 = 7;
@@ -69,6 +71,7 @@ struct MacTextSystemState {
     postscript_names_by_font_id: HashMap<FontId, String>,
     /// UTF-16 indices of ZWNJS
     zwnjs_scratch_space: Vec<usize>,
+    sized_fonts: SizedFonts,
 }
 
 impl MacTextSystem {
@@ -82,6 +85,7 @@ impl MacTextSystem {
             font_ids_by_font_key: HashMap::default(),
             postscript_names_by_font_id: HashMap::default(),
             zwnjs_scratch_space: Vec::new(),
+            sized_fonts: SizedFonts::default(),
         }))
     }
 }
@@ -477,7 +481,7 @@ impl MacTextSystemState {
                     string.set_attribute(
                         cf_range,
                         kCTFontAttributeName,
-                        &font.native_font().clone_with_font_size(font_size.into()),
+                        &self.sized_fonts.get(run.font_id, font, font_size),
                     );
                 }
             }
