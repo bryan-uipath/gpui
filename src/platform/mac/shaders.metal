@@ -872,8 +872,14 @@ fragment float4 surface_fragment(SurfaceFragmentInput input [[stage_in]],
                                  texture2d<float> y_texture
                                  [[texture(SurfaceInputIndex_YTexture)]],
                                  texture2d<float> cb_cr_texture
-                                 [[texture(SurfaceInputIndex_CbCrTexture)]]) {
+                                 [[texture(SurfaceInputIndex_CbCrTexture)]],
+                                 constant uint *kind
+                                 [[buffer(SurfaceInputIndex_Kind)]]) {
   constexpr sampler texture_sampler(mag_filter::linear, min_filter::linear);
+  // A BGRA picture: as it is, its alpha straight (the pipeline blends by it).
+  if (*kind == 1) {
+    return y_texture.sample(texture_sampler, input.texture_position);
+  }
   const float4x4 ycbcrToRGBTransform =
       float4x4(float4(+1.0000f, +1.0000f, +1.0000f, +0.0000f),
                float4(+0.0000f, -0.3441f, +1.7720f, +0.0000f),
