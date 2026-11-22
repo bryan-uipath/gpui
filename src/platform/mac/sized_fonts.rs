@@ -2,7 +2,8 @@
 // Copyright 2026 Longbridge.
 // Modified by Longbridge for gpui-fast.
 // From gpui-fast-apple 0.1.15, src/fast/text_system.rs; changed for gpui 0.2.2: imports, and
-// the test uses `MacTextSystem` (the test of fonts without an `m` is not ported).
+// the test uses `MacTextSystem` and its comments say what it does (the test of fonts without an
+// `m` is not ported).
 //! Native fonts made once per size and kept, so CoreText's shaping caches survive from line to line.
 
 use crate::{FontId, Pixels};
@@ -45,15 +46,14 @@ mod tests {
 
     /// Fonts are made once per size and kept, so a line laid out with a kept
     /// font has to come out exactly as it did with a new one: the same glyphs
-    /// in the same places, however many runs split it into sizes a hair
-    /// apart, and never mixed up with the same font at another size.
+    /// in the same places, however many runs split it, and never mixed up
+    /// with the same font at another size.
     #[test]
     fn lines_laid_out_with_kept_fonts_match_the_first_layout() {
         let fonts = MacTextSystem::new();
         let font_id = fonts.font_id(&font("Helvetica")).unwrap();
         let line = "AVAWAY fi ffi 12.5 office";
-        // Runs alternate between two sizes a hair apart, to keep ligatures
-        // from joining across them.
+        // Runs of one font: each run after the first takes the kept font.
         let runs = [5, 3, 4, 5, 8].map(|len| FontRun { font_id, len });
         let shape = |size| {
             let layout = fonts.layout_line(line, px(size), &runs);
