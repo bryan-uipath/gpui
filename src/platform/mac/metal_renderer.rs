@@ -1089,17 +1089,17 @@ impl MetalRenderer {
             assert!(bgra || pixel_format == kCVPixelFormatType_420YpCbCr8BiPlanarFullRange);
 
             let (y_texture, cb_cr_texture) = if bgra {
-                let texture = self
-                    .core_video_texture_cache
-                    .create_texture_from_image(
-                        surface.image_buffer.as_concrete_TypeRef(),
-                        None,
-                        MTLPixelFormat::BGRA8Unorm,
-                        surface.image_buffer.get_width(),
-                        surface.image_buffer.get_height(),
-                        0,
-                    )
-                    .unwrap();
+                // A buffer the cache cannot take (not IOSurface-backed) is not drawn: no panic.
+                let Ok(texture) = self.core_video_texture_cache.create_texture_from_image(
+                    surface.image_buffer.as_concrete_TypeRef(),
+                    None,
+                    MTLPixelFormat::BGRA8Unorm,
+                    surface.image_buffer.get_width(),
+                    surface.image_buffer.get_height(),
+                    0,
+                ) else {
+                    continue;
+                };
                 (texture.clone(), texture)
             } else {
                 let y_texture = self
